@@ -10,7 +10,7 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,4 +30,43 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.important {
+  display: flex;
+}
+
+
+.urgent {
+  display: flex;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  /* horizontal */
+  align-items: center;
+  /* vertical align */
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.action-panel{
+  min-height: 30vh;
+}
+
+hr { 
+  display: block;
+  overflow: hidden;
+  border-style: inset;
+  border-width: 1px;
+  width: 60%
+}
+
+
+vr { 
+  display: block;
+  overflow: hidden;
+  border-style: inset;
+  border-width: 1px;
 }

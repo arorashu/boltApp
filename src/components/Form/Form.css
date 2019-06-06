@@ -1,0 +1,15 @@
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form > div {
+    display: flex;
+    padding: 5px;
+    margin: 5px;
+}
+
+
+.form > div > div {
+    padding: 5px;
+}
