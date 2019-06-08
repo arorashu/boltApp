@@ -17,11 +17,21 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {id: 1};
+    const allTasks = this.getFromStorage('allTasks');
+    this.state = {allTasks};
   }
 
 
   render() {
+
+    const allTasks = this.state.allTasks;
+    let taskList = [];
+    if(allTasks) {
+      for(let taskName in allTasks) {
+        taskList.push(<TaskCard name={taskName} onTaskDone={this.onTaskDone}/>)
+      }
+    }
+
     return (
       <div className="App">
         <header className="App-header">
@@ -32,10 +42,12 @@ class App extends React.Component {
         <div name="grid" className="grid">
           <div className="important">
             <Quadrant>
-              <TaskCard name="Do stuff"></TaskCard>
-              <TaskCard name="Other stuff"></TaskCard>
+              {taskList}
+              {/* <TaskCard name="Do stuff"></TaskCard>
+              <TaskCard name="Other stuff"></TaskCard> */}
+              
             </Quadrant>
-            <vr/>
+            {/* <vr/>
             <Quadrant>
               <TaskCard name="1"></TaskCard>
             </Quadrant>
@@ -50,12 +62,12 @@ class App extends React.Component {
             <vr/>
             <Quadrant>
               <TaskCard name="4"></TaskCard>
-            </Quadrant>
+            </Quadrant> */}
           </div>
         </div>
   
         <div className="action-panel">
-          <Form onSave={this.onElementAdd}></Form>
+          <Form onTaskAdd={this.onTaskAdd}></Form>
           
         </div>
         {/* <Dialog isOpen={true}>
@@ -65,8 +77,30 @@ class App extends React.Component {
     );
   }
 
-  onElementAdd = (allTasks) => {
-    this.setState(allTasks);
+  onTaskAdd = (newTask) => {
+    let allTasks = this.getFromStorage('allTasks');
+    if (!allTasks) {
+        allTasks = {};
+    }
+    allTasks[newTask.taskName] = newTask;
+    this.addToStorage('allTasks', allTasks);
+    this.setState({allTasks: allTasks});
+  }
+
+  onTaskDone = (doneTaskName) => {
+    let allTasks = this.getFromStorage('allTasks');
+    delete allTasks[doneTaskName];
+    this.addToStorage('allTasks', allTasks);
+    this.setState({allTasks: allTasks});
+  }
+
+  getFromStorage = (key) => {
+    let value = localStorage.getItem(key);
+    return JSON.parse(value);
+  }
+
+  addToStorage(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
   }
 }
 

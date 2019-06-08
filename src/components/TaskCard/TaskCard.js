@@ -3,10 +3,10 @@ import './Task.css';
 
 function TaskCard(props) {
   return (
-    <React.Fragment className="task-card">
+    <div className="task-card">
         <div>{props.name}</div>
-        <div><button>Done!</button></div>
-    </React.Fragment>
+        <div><button onClick={() => {props.onTaskDone(props.name)}}>&#10003;</button></div>
+    </div>
   );
 }
 

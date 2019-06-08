@@ -36,20 +36,9 @@ function addItem(props) {
     let urgency = document.getElementById('urgency').value;
 
     let task = { taskName, importance, urgency };
-    let allTasks = getFromStorage('allTasks');
-    if (!allTasks) {
-        allTasks = new Array();
-    }
-    allTasks.push(task);
-    addToStorage('allTasks', allTasks);
-
-    // alert(getFromStorage('allTasks').length);
-    props.onSave(allTasks);
+    props.onTaskAdd(task);
 }
 
-function addToStorage(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
-}
 
 function getFromStorage(key) {
     let value = localStorage.getItem(key);
