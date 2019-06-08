@@ -12,13 +12,16 @@ function Form(props) {
             <div>
                 <div>Is it important?</div>
                 <select name="" id="importance">
-                    <option>na</option>
-                    <option>very</option>
+                    <option value={0}>na</option>
+                    <option value={1}>very</option>
                 </select>
             </div>
             <div>
                 <div>Is it urgent?</div>
-                <select name="" id="urgency"></select>
+                <select name="" id="urgency">
+                    <option value={0}>nope</option>
+                    <option value={1}>yesyes</option>
+                </select>
             </div>
             <div>
                 <button onClick={function () {
@@ -31,11 +34,12 @@ function Form(props) {
 }
 
 function addItem(props) {
-    let taskName = document.getElementById('taskName').value;
-    let importance = document.getElementById('importance').value;
-    let urgency = document.getElementById('urgency').value;
+    const taskName = document.getElementById('taskName').value;
+    const isImportant = document.getElementById('importance').value;
+    const isUrgent = document.getElementById('urgency').value;
+    const isDone = false;
 
-    let task = { taskName, importance, urgency };
+    let task = { taskName, isImportant, isUrgent, isDone };
     props.onTaskAdd(task);
 }
 

@@ -18,19 +18,13 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     const allTasks = this.getFromStorage('allTasks');
-    this.state = {allTasks};
+    const taskList = this.getTaskList(allTasks);
+    this.state = {allTasks, taskList};
   }
 
 
   render() {
-
-    const allTasks = this.state.allTasks;
-    let taskList = [];
-    if(allTasks) {
-      for(let taskName in allTasks) {
-        taskList.push(<TaskCard name={taskName} onTaskDone={this.onTaskDone}/>)
-      }
-    }
+    const taskList = this.state.taskList;
 
     return (
       <div className="App">
@@ -40,29 +34,26 @@ class App extends React.Component {
           </p>
         </header>
         <div name="grid" className="grid">
-          <div className="important">
+          <div className="urgent">
             <Quadrant>
-              {taskList}
-              {/* <TaskCard name="Do stuff"></TaskCard>
-              <TaskCard name="Other stuff"></TaskCard> */}
-              
+              {taskList[1][0]}
             </Quadrant>
-            {/* <vr/>
+            <vr/>
             <Quadrant>
-              <TaskCard name="1"></TaskCard>
+              {taskList[1][1]}
             </Quadrant>
           </div>
   
           <hr/>
           
-          <div className="urgent">
+          <div className="important">
             <Quadrant>
-              <TaskCard name="3"></TaskCard>
+              {taskList[0][0]}
             </Quadrant>
             <vr/>
             <Quadrant>
-              <TaskCard name="4"></TaskCard>
-            </Quadrant> */}
+              {taskList[0][1]}
+            </Quadrant>
           </div>
         </div>
   
@@ -77,6 +68,37 @@ class App extends React.Component {
     );
   }
 
+  getTaskList(allTasks) {
+    let taskList = [];
+    taskList[0] = [];
+    taskList[1] = [];
+    taskList[0][0] = [];
+    taskList[0][1] = [];
+    taskList[1][1] = [];
+    taskList[1][0] = [];
+
+    if(allTasks) {
+      for(let taskName in allTasks) {
+        const task = allTasks[taskName];
+        const isUrgent = parseInt(task.isUrgent);
+        const isImportant = parseInt(task.isImportant);
+        let quadrantList = taskList[isUrgent][isImportant];
+        quadrantList.push(<TaskCard name={taskName} onTaskDone={this.onTaskDone}/>);
+      }
+    }
+
+    return taskList;
+  }
+
+  addTaskToTaskList(task) {
+    let taskList = this.state.taskList;
+    const isUrgent = parseInt(task.isUrgent);
+    const isImportant = parseInt(task.isImportant);
+    let quadrantList = taskList[isUrgent][isImportant];
+    quadrantList.push(<TaskCard name={task.taskName} onTaskDone={this.onTaskDone}/>);
+    return taskList;
+  }
+
   onTaskAdd = (newTask) => {
     let allTasks = this.getFromStorage('allTasks');
     if (!allTasks) {
@@ -84,12 +106,13 @@ class App extends React.Component {
     }
     allTasks[newTask.taskName] = newTask;
     this.addToStorage('allTasks', allTasks);
-    this.setState({allTasks: allTasks});
+    const taskList = this.addTaskToTaskList(newTask);
+    this.setState({allTasks: allTasks, taskList});
   }
 
   onTaskDone = (doneTaskName) => {
     let allTasks = this.getFromStorage('allTasks');
-    delete allTasks[doneTaskName];
+    allTasks[doneTaskName].isDone = true;
     this.addToStorage('allTasks', allTasks);
     this.setState({allTasks: allTasks});
   }
