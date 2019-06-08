@@ -3,6 +3,7 @@ import React from 'react';
 import './App.css';
 import TaskCard from './components/TaskCard/TaskCard';
 import Quadrant from './components/Quadrant/Quadrant';
+import Form from "./components/Form/Form";
 import {
   Dialog,
   // DialogOverlay,
@@ -17,10 +18,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {id: 1};
-  }
-
-  addItem = () => {
-    alert('add item clicked!' + this.state.id);
   }
 
 
@@ -58,13 +55,18 @@ class App extends React.Component {
         </div>
   
         <div className="action-panel">
-          <button onClick={this.addItem}>Add Item</button>
+          <Form onSave={this.onElementAdd}></Form>
+          
         </div>
-        <Dialog isOpen={true}>
+        {/* <Dialog isOpen={true}>
           <p>Some Content</p>
-        </Dialog>
+        </Dialog> */}
       </div>
     );
+  }
+
+  onElementAdd = (allTasks) => {
+    this.setState(allTasks);
   }
 }
 
