@@ -4,11 +4,11 @@ import './App.css';
 import TaskCard from './components/TaskCard/TaskCard';
 import Quadrant from './components/Quadrant/Quadrant';
 import Form from "./components/Form/Form";
-import {
-  Dialog,
-  // DialogOverlay,
-  // DialogContent
-} from "@reach/dialog";
+// import {
+//   Dialog,
+//   // DialogOverlay,
+//   // DialogContent
+// } from "@reach/dialog";
 
 
 
@@ -80,6 +80,7 @@ class App extends React.Component {
     if(allTasks) {
       for(let taskName in allTasks) {
         const task = allTasks[taskName];
+        if(task.isDone===true) continue;
         const isUrgent = parseInt(task.isUrgent);
         const isImportant = parseInt(task.isImportant);
         let quadrantList = taskList[isUrgent][isImportant];
@@ -90,14 +91,14 @@ class App extends React.Component {
     return taskList;
   }
 
-  addTaskToTaskList(task) {
-    let taskList = this.state.taskList;
-    const isUrgent = parseInt(task.isUrgent);
-    const isImportant = parseInt(task.isImportant);
-    let quadrantList = taskList[isUrgent][isImportant];
-    quadrantList.push(<TaskCard name={task.taskName} onTaskDone={this.onTaskDone}/>);
-    return taskList;
-  }
+  // addTaskToTaskList(task) {
+  //   let taskList = this.state.taskList;
+  //   const isUrgent = parseInt(task.isUrgent);
+  //   const isImportant = parseInt(task.isImportant);
+  //   let quadrantList = taskList[isUrgent][isImportant];
+  //   quadrantList.push(<TaskCard name={task.taskName} onTaskDone={this.onTaskDone}/>);
+  //   return taskList;
+  // }
 
   onTaskAdd = (newTask) => {
     let allTasks = this.getFromStorage('allTasks');
@@ -106,15 +107,27 @@ class App extends React.Component {
     }
     allTasks[newTask.taskName] = newTask;
     this.addToStorage('allTasks', allTasks);
-    const taskList = this.addTaskToTaskList(newTask);
+    const taskList = this.getTaskList(allTasks);
     this.setState({allTasks: allTasks, taskList});
   }
+
+  // removeFromTaskList(task) {
+  //   let taskList = this.state.taskList;
+  //   const isUrgent = parseInt(task.isUrgent);
+  //   const isImportant = parseInt(task.isImportant);
+  //   let quadrantList = taskList[isUrgent][isImportant];
+  //   const elementToFind = <TaskCard name={task.taskName} onTaskDone={this.onTaskDone}/>;
+  //   const indexToDelete = quadrantList.findIndex((element) => element===elementToFind);
+  //   quadrantList.splice(indexToDelete, 1);
+  //   return taskList;
+  // }
 
   onTaskDone = (doneTaskName) => {
     let allTasks = this.getFromStorage('allTasks');
     allTasks[doneTaskName].isDone = true;
+    const taskList = this.getTaskList(allTasks);
     this.addToStorage('allTasks', allTasks);
-    this.setState({allTasks: allTasks});
+    this.setState({allTasks: allTasks, taskList});
   }
 
   getFromStorage = (key) => {
