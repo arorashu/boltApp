@@ -44,9 +44,4 @@ function addItem(props) {
 }
 
 
-function getFromStorage(key) {
-    let value = localStorage.getItem(key);
-    return JSON.parse(value);
-}
-
 export default Form;

@@ -2,13 +2,8 @@ import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import TaskCard from './components/TaskCard/TaskCard';
-import Quadrant from './components/Quadrant/Quadrant';
 import Form from "./components/Form/Form";
-// import {
-//   Dialog,
-//   // DialogOverlay,
-//   // DialogContent
-// } from "@reach/dialog";
+import Grid from "./components/Grid/Grid";
 
 
 
@@ -19,12 +14,16 @@ class App extends React.Component {
     super(props);
     const allTasks = this.getFromStorage('allTasks');
     const taskList = this.getTaskList(allTasks);
-    this.state = {allTasks, taskList};
+    this.appViews = {
+      HOME: 1,
+      CREATE_TASK: 2
+    };
+    this.state = {allTasks, taskList, view: this.appViews.HOME};
   }
 
 
   render() {
-    const taskList = this.state.taskList;
+    // const taskList = this.state.taskList;
 
     return (
       <div className="App">
@@ -33,34 +32,19 @@ class App extends React.Component {
             Bolt App
           </p>
         </header>
-        <div name="grid" className="grid">
-          <div className="urgent">
-            <Quadrant>
-              {taskList[1][0]}
-            </Quadrant>
-            <vr/>
-            <Quadrant>
-              {taskList[1][1]}
-            </Quadrant>
-          </div>
+
+      <Grid taskList={this.state.taskList}></Grid>
+
+      <div><button onClick={this.addNewTask}>Add New Task!</button>
+      </div>
   
-          <hr/>
-          
-          <div className="important">
-            <Quadrant>
-              {taskList[0][0]}
-            </Quadrant>
-            <vr/>
-            <Quadrant>
-              {taskList[0][1]}
-            </Quadrant>
-          </div>
-        </div>
-  
+      {(this.state.view == this.appViews.CREATE_TASK) && (
         <div className="action-panel">
+          <button onClick={this.cancelAddTask}>Never Mind</button>
           <Form onTaskAdd={this.onTaskAdd}></Form>
-          
         </div>
+      )}
+        
         {/* <Dialog isOpen={true}>
           <p>Some Content</p>
         </Dialog> */}
@@ -128,6 +112,14 @@ class App extends React.Component {
     const taskList = this.getTaskList(allTasks);
     this.addToStorage('allTasks', allTasks);
     this.setState({allTasks: allTasks, taskList});
+  }
+
+  addNewTask = () => {
+    this.setState({view: this.appViews.CREATE_TASK});
+  }
+
+  cancelAddTask = () => {
+    this.setState({view: this.appViews.HOME});
   }
 
   getFromStorage = (key) => {
